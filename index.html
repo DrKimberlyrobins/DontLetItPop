@@ -72,6 +72,42 @@
 
     <div class="balloon"></div>
     <div class="string"></div>
+<script>
+    const balloon = document.querySelector(".balloon");
+    const string = document.querySelector(".string");
 
+    let size = 1;
+    let growing = true;
+
+    function animateBalloon() {
+
+        if (growing) {
+            size += 0.0007;
+
+            if (size >= 1.42) {
+                growing = false;
+            }
+        } else {
+            size -= 0.0005;
+
+            if (size <= 1.05) {
+                growing = true;
+            }
+        }
+
+        const wobble = Math.sin(Date.now() / 180) * 3;
+
+        balloon.style.transform =
+            `scale(${size}) rotate(${wobble}deg)`;
+
+        string.style.transform =
+            `scaleY(${size})`;
+
+        requestAnimationFrame(animateBalloon);
+    }
+
+    animateBalloon();
+</script>
+    
 </body>
 </html>
