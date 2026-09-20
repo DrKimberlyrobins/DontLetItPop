@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Don't Let It Pop!</title>
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(#101020, #24002f);
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 58px;
+            margin: 35px 10px 5px;
+        }
+
+        .instruction {
+            font-size: 34px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .balloon {
+            width: 260px;
+            height: 330px;
+            margin: 55px auto 0;
+            background: radial-gradient(circle at 35% 25%,
+                #ffaaaa,
+                #ff3030 35%,
+                #c40000 75%,
+                #650000);
+            border-radius: 50% 50% 48% 48%;
+            box-shadow: 0 0 45px rgba(255, 50, 50, .55);
+            position: relative;
+        }
+
+        .balloon:after {
+            content: "";
+            position: absolute;
+            bottom: -24px;
+            left: 115px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 28px solid #a50000;
+        }
+
+        .string {
+            width: 2px;
+            height: 230px;
+            background: white;
+            margin: 22px auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🎈 DON'T LET IT POP! 🎈</h1>
+
+    <div class="instruction">
+        ❤️ TAP TO SAVE THE BALLOON! ❤️
+    </div>
+
+    <div class="balloon"></div>
+    <div class="string"></div>
+
+</body>
+</html>
