@@ -171,6 +171,9 @@ h1 {
 const balloon = document.getElementById("balloon");
 const squeak = new Audio("freesound_community-plastic-squeak8-103385.mp3");
 squeak.volume = 0.8;
+const backgroundMusic = new Audio("music-for-videos-tension-game-strange-music-160495.mp3");
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.18;   
 
 let squeakPlayed = false;
 
@@ -322,6 +325,11 @@ setInterval(() => {
         String(seconds).padStart(2, "0");
 
 }, 1000);
+document.addEventListener("click", () => {
+    if (backgroundMusic.paused) {
+        backgroundMusic.play();
+    }
+}, { once: true });    
 </script>
 
 </body>
