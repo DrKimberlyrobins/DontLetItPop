@@ -76,13 +76,13 @@
     function animateBalloon() {
 
         if (growing) {
-            size += 0.0007;
+            size += 0.00015;
 
             if (size >= 1.42) {
                 growing = false;
             }
         } else {
-            size -= 0.0005;
+            size -= 0.00002;
 
             if (size <= 1.05) {
                 growing = true;
