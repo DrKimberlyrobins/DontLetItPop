@@ -1,105 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Don't Let It Pop!</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: linear-gradient(#101020, #24002f);
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            overflow: hidden;
-        }
+<title>Tap Until It Pops!</title>
 
-        h1 {
-            font-size: 58px;
-            margin: 35px 10px 5px;
-        }
+<style>
 
-        .instruction {
-            font-size: 34px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
+body {
+    margin: 0;
+    min-height: 100vh;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #30104a, #09000f 75%);
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
 
-        .balloon {
-            width: 260px;
-            height: 330px;
-            margin: 55px auto 0;
-            background: radial-gradient(circle at 35% 25%,
-                #ffaaaa,
-                #ff3030 35%,
-                #c40000 75%,
-                #650000);
-            border-radius: 50% 50% 48% 48%;
-            box-shadow: 0 0 45px rgba(255, 50, 50, .55);
-            position: relative;
-        }
+h1 {
+    font-size: 58px;
+    margin: 30px 10px 5px;
+}
 
-        .balloon:after {
-            content: "";
-            position: absolute;
-            bottom: -24px;
-            left: 115px;
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 28px solid #a50000;
-        }
+.instruction {
+    font-size: 32px;
+    font-weight: bold;
+    margin-top: 8px;
+}
 
+/* BALLOON AREA */
 
-    </style>
+.stage {
+    height: 720px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* BALLOON */
+
+.balloon {
+    width: 300px;
+    height: 385px;
+
+    background:
+        radial-gradient(
+            circle at 32% 23%,
+            #ffffff 0%,
+            #ffb3b3 7%,
+            #ff4040 25%,
+            #e00000 60%,
+            #780000 100%
+        );
+
+    border-radius: 50% 50% 47% 47%;
+
+    box-shadow:
+        0 0 35px rgba(255,0,0,.55),
+        0 0 90px rgba(255,0,0,.25);
+
+    position: relative;
+
+    transform-origin: center bottom;
+}
+
+/* BALLOON KNOT */
+
+.balloon::after {
+    content: "";
+    position: absolute;
+
+    bottom: -25px;
+    left: 135px;
+
+    width: 0;
+    height: 0;
+
+    border-left: 16px solid transparent;
+    border-right: 16px solid transparent;
+    border-top: 30px solid #9d0000;
+}
+
+/* POP FLASH */
+
+.flash {
+    position: fixed;
+    inset: 0;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* WINNER MESSAGE */
+
+.winner {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%) scale(0);
+
+    width: 90%;
+
+    font-size: 72px;
+    font-weight: bold;
+
+    text-shadow:
+        0 0 15px white,
+        0 0 35px gold;
+
+    z-index: 10;
+}
+
+/* CONFETTI */
+
+.confetti {
+    position: fixed;
+    top: -30px;
+
+    width: 14px;
+    height: 22px;
+
+    z-index: 9;
+
+    animation: fall 4s linear forwards;
+}
+
+@keyframes fall {
+
+    to {
+        transform:
+            translateY(110vh)
+            rotate(900deg);
+    }
+}
+
+</style>
 </head>
+
 
 <body>
 
-    <h1>🎈 DON'T LET IT POP! 🎈</h1>
+<h1>🎈 TAP UNTIL IT POPS! 🎈</h1>
 
-    <div class="instruction">
-        ❤️ TAP TO SAVE THE BALLOON! ❤️
-    </div>
+<div class="instruction">
+    👀 GUESS THE SURPRISE! 👀
+</div>
 
-    <div class="balloon"></div>
-    
+<div class="stage">
+
+    <div class="balloon" id="balloon"></div>
+
+</div>
+
+<div class="flash" id="flash"></div>
+
+<div class="winner" id="winner">
+    🎉 YOU DID IT! 🎉
+</div>
+
+
 <script>
-    const balloon = document.querySelector(".balloon");
 
-    let size = 1;
-    let growing = true;
+const balloon = document.getElementById("balloon");
 
-    function animateBalloon() {
-
-        if (growing) {
-            size += 0.00015;
-
-            if (size >= 1.42) {
-                growing = false;
-            }
-        } else {
-            size -= 0.00002;
-
-            if (size <= 1.05) {
-                growing = true;
-            }
-        }
-
-        const wobble = Math.sin(Date.now() / 180) * 3;
-
-        balloon.style.transform =
-            `scale(${size}) rotate(${wobble}deg)`;
+let time = 0;
 
 
-        requestAnimationFrame(animateBalloon);
+/* -----------------------
+   BALLOON SUSPENSE
+----------------------- */
+
+function animateBalloon() {
+
+    time += 0.015;
+
+    /* gentle breathing */
+    let pulse =
+        1 + Math.sin(time) * 0.018;
+
+    /* tiny natural wobble */
+    let wobble =
+        Math.sin(time * 1.7) * 2;
+
+    /*
+       Every so often the balloon
+       suddenly looks VERY close
+       to popping.
+    */
+
+    let danger =
+        Math.max(
+            0,
+            Math.sin(time * 0.23)
+        );
+
+    danger = Math.pow(danger, 12);
+
+    let dangerSize =
+        danger * 0.09;
+
+    let dangerShake =
+        danger *
+        Math.sin(time * 35) *
+        5;
+
+    balloon.style.transform =
+        `scale(${pulse + dangerSize})
+         rotate(${wobble + dangerShake}deg)`;
+
+    requestAnimationFrame(animateBalloon);
+}
+
+animateBalloon();
+
+
+/* -----------------------
+   CONFETTI
+----------------------- */
+
+function makeConfetti() {
+
+    const colors = [
+        "#ff0000",
+        "#ffd700",
+        "#00ff88",
+        "#00aaff",
+        "#ff44cc",
+        "#ffffff"
+    ];
+
+    for (let i = 0; i < 150; i++) {
+
+        const piece =
+            document.createElement("div");
+
+        piece.className = "confetti";
+
+        piece.style.left =
+            Math.random() * 100 + "vw";
+
+        piece.style.background =
+            colors[
+                Math.floor(
+                    Math.random() *
+                    colors. length
+                )
+            ];
+
+        piece.style.animationDelay =
+            Math.random() * 1.5 + "s";
+
+        document.body.appendChild(piece);
+
+        setTimeout(() => {
+            piece.remove();
+        }, 6000);
     }
+}
 
-    animateBalloon();
+
+/* -----------------------
+   POP FUNCTION
+   (We'll connect this later)
+----------------------- */
+
+function popBalloon() {
+
+    const flash =
+        document.getElementById("flash");
+
+    const winner =
+        document.getElementById("winner");
+
+    balloon.style.display = "none";
+
+    flash.style.opacity = "1";
+
+    setTimeout(() => {
+        flash.style.opacity = "0";
+    }, 120);
+
+    winner.style.transform =
+        "translate(-50%, -50%) scale(1)";
+
+    makeConfetti();
+}
+
 </script>
-    
+
 </body>
 </html>
