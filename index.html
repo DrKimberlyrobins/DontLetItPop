@@ -167,6 +167,10 @@ h1 {
 <script>
 
 const balloon = document.getElementById("balloon");
+const squeak = new Audio("freesound_community-plastic-squeak8-103385.mp3");
+squeak.volume = 0.8;
+
+let squeakPlayed = false;
 
 let time = 0;
 
@@ -208,6 +212,15 @@ function animateBalloon() {
         danger *
         Math.sin(time * 35) *
         5;
+    if (danger > 0.55 && !squeakPlayed) {
+    squeak.currentTime = 0;
+    squeak.play();
+    squeakPlayed = true;
+}
+
+if (danger < 0.15) {
+    squeakPlayed = false;
+}
 
     balloon.style.transform =
         `scale(${pulse + dangerSize})
